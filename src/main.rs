@@ -10,7 +10,9 @@ use rand::Rng;
 use nject_axum::CreateUser;
 use nject_axum::Module;
 use nject_axum::UserService;
+use nject_axum::CpuIntensiveService;
 use nject::{injectable, provider};
+use serde::ser;
 
 #[provider]
 #[injectable]
@@ -47,8 +49,9 @@ async fn get_user(
     State(prov): State<&'static Provider>,
     Path(user_id): Path<usize>,
 ) -> impl IntoResponse {
-    let service = prov.provide::<UserService>();
-    let user = service.get(user_id);
+    let service = prov.provide::<CpuIntensiveService>();
+    // let user = service.get(user_id);
+    let user = service.process_cpu();
     (StatusCode::OK, Json(user))
 }
 

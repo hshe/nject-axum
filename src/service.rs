@@ -18,3 +18,18 @@ impl<'a> UserService<'a> {
         self.repository.get(user_id)
     }
 }
+
+#[injectable]
+pub struct CpuIntensiveService<'a> {
+    repository: &'a dyn Repository,
+}
+
+impl<'a> CpuIntensiveService<'a> {
+    pub fn process_cpu(&self) -> String {
+        let mut s = String::new();
+        for _ in 0..300000 {
+            s.push_str(&self.repository.get(1).unwrap().name);
+        }
+        s
+    }
+}
